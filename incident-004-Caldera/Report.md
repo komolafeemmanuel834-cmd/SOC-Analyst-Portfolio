@@ -30,9 +30,9 @@ Particular attention was given to discovery-related activities, unusual command 
 The exercise also provided an opportunity to evaluate incident response procedures. Analysts practiced identifying indicators of compromise, investigating alerts, and documenting findings in a manner consistent with real-world security operations. Any gaps in visibility or detection identified during the exercise could then be used to improve logging configurations, SIEM correlation rules, and overall defensive readiness.
 
 ## Tools
-*Caldera – Used to safely and repeatedly emulate adversary behaviour in a controlled environment for the purpose of validating security controls and detection capabilities.
-*Powershell - used during the initial stages of the operation to download and execute the CALDERA agent on the target machine.
-*MITRE ATT&CK Framework – Used to map the simulated adversary behaviour to relevant tactics and techniques, specifically Credential Dumping (T1003).
-*Windows Event Logs – Used to review system and security events generated during the Atomic Red Team test and identify evidence of suspicious activity.
-*Endpoint Detection and Response (EDR) – Used to monitor endpoint activity and determine whether the simulated credential dumping behaviour was detected and alerted on.
-*Security Information and Event Management (SIEM) – Used to collect and analyze security logs from the environment, search for relevant activity, and determine whether detection rules generated alerts during the emulation exercise.
+* Caldera – Used to safely and repeatedly emulate adversary behaviour in a controlled environment for the purpose of validating security controls and detection capabilities.
+* Powershell - used during the initial stages of the operation to download and execute the CALDERA agent on the target machine.
+* MITRE ATT&CK Framework – Used to map the simulated adversary behaviour to relevant tactics and techniques, specifically Credential Dumping (T1003).
+* Windows Event Logs – Used to review system and security events generated during the Atomic Red Team test and identify evidence of suspicious activity.
+* Endpoint Detection and Response (EDR) – Used to monitor endpoint activity and determine whether the simulated credential dumping behaviour was detected and alerted on.
+* Security Information and Event Management (SIEM) – Used to collect and analyze security logs from the environment, search for relevant activity, and determine whether detection rules generated alerts during the emulation exercise.
