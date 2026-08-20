@@ -4,9 +4,9 @@ CALDERA is an open-source framework built on the MITRE ATT&CK framework, that is
 In addition, it provides a modular environment for red team engagements, supporting red team operators for the manual execution of TTPs and blue teamers for automated incident response actions. Security analysts can leverage the CALDERA framework in different cases such as autonomous Autonomous Red Team Engagements, Manual Red Team Engagements and Autonomous Incident Response.
 
 ## Objectives
-The objective of this investigation is to demonstrate how Caldera can be used to safely emulate adversary techniques mapped to the MITRE ATT&CK framework. The exercise aims to validate the effectiveness of security controls, identify detection gaps, and evaluate the organization’s ability to detect, investigate, and respond to simulated malicious activity manually and automatically.
+The objective of this investigation is to demonstrate how MITRE CALDERA can be used to safely emulate adversary behaviours mapped to the MITRE ATT&CK framework. The exercise aims to validate security controls, identify detection and visibility gaps, and evaluate an organization’s ability to detect, investigate, and respond to simulated malicious activity.
 
-The investigation also demonstrates how threat emulation can be used as part of a continuous security testing process, allowing security teams to move from emulating adversary behaviour to developing and validating effective detection capabilities.
+The investigation also demonstrates how adversary emulation can be incorporated into continuous security testing by allowing defenders to observe attacker behaviours, analyze the resulting telemetry, and use the findings to improve detection and incident response capabilities.
 
 ## Scenario
 An organization in the financial sector wants to evaluate its ability to detect and respond to post-compromise attacker activity within its Windows Active Directory environment. To achieve this, the security team uses MITRE CALDERA to emulate a threat actor that has gained access to a workstation through a compromised employee account.
@@ -30,19 +30,19 @@ Particular attention was given to discovery-related activities, unusual command 
 The exercise also provided an opportunity to evaluate incident response procedures. Analysts practiced identifying indicators of compromise, investigating alerts, and documenting findings in a manner consistent with real-world security operations. Any gaps in visibility or detection identified during the exercise could then be used to improve logging configurations, SIEM correlation rules, and overall defensive readiness.
 
 ## Tools
-* Caldera – Used to safely and repeatedly emulate adversary behaviour in a controlled environment for the purpose of validating security controls and detection capabilities.
-* Powershell - used during the initial stages of the operation to download and execute the CALDERA agent on the target machine.
-* MITRE ATT&CK Framework – Used to map the simulated adversary behaviour to relevant tactics and techniques, specifically Credential Dumping (T1003).
-* Windows Event Logs – Used to review system and security events generated during the Atomic Red Team test and identify evidence of suspicious activity.
-* Endpoint Detection and Response (EDR) – Used to monitor endpoint activity and determine whether the simulated credential dumping behaviour was detected and alerted on.
-* Security Information and Event Management (SIEM) – Used to collect and analyze security logs from the environment, search for relevant activity, and determine whether detection rules generated alerts during the emulation exercise.
+* MITRE CALDERA – Used to conduct controlled adversary emulation, create and modify abilities, build adversary profiles, and execute operations against a test environment.
+* PowerShell – Used during the lab to deploy and execute the CALDERA agent on the target Windows system.
+* MITRE ATT&CK Framework – Used to map the simulated adversary behaviours to relevant tactics and techniques.
+* Windows Event Logs – Used as a primary source of telemetry for investigating process execution, account activity, service changes, scheduled tasks, log clearing, and other system activity.
+* Endpoint Detection and Response (EDR) – Used to monitor endpoint activity and identify potentially malicious behaviours generated during the emulation.
+* Security Information and Event Management (SIEM) – Used to collect, search, correlate, and analyze security telemetry generated during the operation.
 
 ## Investigation Analysis
-The engagement began with the creation of a Manx agent within the CALDERA framework. The agent was deployed to the victim machine using PowerShell, establishing communication between the target system and the CALDERA server. This step simulated an attacker gaining an initial foothold through the execution of a script-based payload. From a defensive perspective, PowerShell execution and subsequent network communications would represent the first indicators of compromise and should be investigated through PowerShell operational logs, process creation events, and network connection telemetry.
+The engagement began with the creation of a Manx agent within the CALDERA framework. The agent was deployed to the target Windows machine using PowerShell, establishing communication between the target system and the CALDERA server. This simulated an attacker establishing a foothold within the environment. From a defensive perspective, PowerShell execution and subsequent network communication represent important telemetry that can be investigated through PowerShell logging, process creation events, and network connection data.
 
-Following successful agent deployment, custom abilities were created and existing abilities were modified within CALDERA to tailor the attack simulation. These abilities were then combined into a custom adversary profile designed to emulate multiple stages of the MITRE ATT&CK attack lifecycle. The profile consisted of techniques covering Initial Access, Execution, Persistence, Discovery, Collection, and Defense Evasion.
+Following successful agent deployment, custom abilities were created and existing abilities were modified within CALDERA to tailor the emulation to the investigation requirements. These abilities were combined into a custom adversary profile containing multiple ATT&CK techniques across areas such as Execution, Persistence, Discovery, Collection, and Defense Evasion.
 
-An operation was subsequently created and executed against the victim machine. During the operation, each ability was executed sequentially, allowing the impact of individual techniques to be observed and analyzed through Windows Event Logs. This approach enabled a detailed investigation of how adversary activities manifest within host-based logging sources and provided valuable insight into detection opportunities.
+An operation was then created and executed against the target machine. The execution of the abilities generated activity that could be observed through Windows Event Logs and other available security telemetry. This provided an opportunity to investigate how different adversary techniques manifest within a Windows environment and identify potential detection opportunities.
 
 * Analysis of Executed Techniques
 * Spearphishing Attachment (T1566.001)
