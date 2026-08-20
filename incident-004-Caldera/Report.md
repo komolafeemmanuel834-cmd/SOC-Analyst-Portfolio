@@ -36,3 +36,139 @@ The exercise also provided an opportunity to evaluate incident response procedur
 * Windows Event Logs – Used to review system and security events generated during the Atomic Red Team test and identify evidence of suspicious activity.
 * Endpoint Detection and Response (EDR) – Used to monitor endpoint activity and determine whether the simulated credential dumping behaviour was detected and alerted on.
 * Security Information and Event Management (SIEM) – Used to collect and analyze security logs from the environment, search for relevant activity, and determine whether detection rules generated alerts during the emulation exercise.
+
+## Investigation Analysis
+The engagement began with the creation of a Manx agent within the CALDERA framework. The agent was deployed to the victim machine using PowerShell, establishing communication between the target system and the CALDERA server. This step simulated an attacker gaining an initial foothold through the execution of a script-based payload. From a defensive perspective, PowerShell execution and subsequent network communications would represent the first indicators of compromise and should be investigated through PowerShell operational logs, process creation events, and network connection telemetry.
+
+Following successful agent deployment, custom abilities were created and existing abilities were modified within CALDERA to tailor the attack simulation. These abilities were then combined into a custom adversary profile designed to emulate multiple stages of the MITRE ATT&CK attack lifecycle. The profile consisted of techniques covering Initial Access, Execution, Persistence, Discovery, Collection, and Defense Evasion.
+
+An operation was subsequently created and executed against the victim machine. During the operation, each ability was executed sequentially, allowing the impact of individual techniques to be observed and analyzed through Windows Event Logs. This approach enabled a detailed investigation of how adversary activities manifest within host-based logging sources and provided valuable insight into detection opportunities.
+
+* Analysis of Executed Techniques
+* Spearphishing Attachment (T1566.001)
+
+This technique simulated a phishing attack in which a malicious attachment is delivered to a victim. Although the technique was emulated rather than delivered through an actual email campaign, it represented the initial access vector commonly used by threat actors.
+
+From an investigative perspective, analysts should focus on process creation events associated with document execution, suspicious child processes spawned from Microsoft Office applications, and PowerShell activity initiated from user-facing applications.
+
+* Windows Management Instrumentation (T1047)
+
+The adversary leveraged Windows Management Instrumentation (WMI) to execute commands and interact with the operating system.
+
+WMI is frequently abused by attackers due to its legitimate administrative functionality. During investigation, analysts should examine WMI activity logs, process creation events, and remote execution artifacts to determine whether WMI was used for unauthorized command execution or lateral movement.
+
+* Service Execution (T1569.002)
+
+This technique involved the creation or modification of Windows services to execute commands or payloads.
+
+Service-based execution is commonly used to establish persistence or execute malicious code with elevated privileges. Evidence of this activity can often be identified through service creation events, service state changes, and associated process execution logs.
+
+* Scheduled Task/Job: Scheduled Task (T1053.005)
+
+The adversary created scheduled tasks to automate command execution on the target system.
+
+Scheduled tasks are often used by attackers to maintain persistence or execute actions at predefined intervals. During investigation, analysts should review task creation events, task modifications, and related process execution records to identify unauthorized scheduled jobs.
+
+* Local Account (T1136.001)
+
+A local user account was created to simulate persistence and privilege retention mechanisms used by attackers.
+
+The creation of unauthorized accounts is a critical indicator of compromise because it may allow continued access even after the initial attack vector has been removed. Analysts should review account management logs and identify any newly created users that do not align with legitimate administrative activities.
+
+* Clear Windows Event Logs (T1070.001)
+
+This technique was executed to simulate an adversary attempting to remove evidence of their actions by clearing Windows Event Logs.
+
+Log clearing is a significant indicator of malicious activity because it directly impacts forensic visibility. During the investigation, analysts should identify events indicating log deletion or audit log clearing, as these activities often occur during the later stages of an intrusion.
+
+* File and Directory Discovery (T1083)
+
+The adversary enumerated files and directories within the target system to identify potentially valuable information.
+
+This activity generated evidence of file system enumeration and directory traversal. Such behavior is frequently observed during reconnaissance phases when attackers search for documents, credentials, configuration files, or other sensitive information.
+
+* Data from Local System (T1005)
+
+The final stage involved collecting files from the compromised host.
+
+This activity simulated the collection phase of an attack where data is gathered prior to exfiltration. Analysts should investigate unusual file access patterns, mass file enumeration, and evidence of staging activities that may indicate preparation for data theft.
+
+* Blue Team Investigation
+
+From a Blue Team perspective, the operation provided an opportunity to monitor adversary activity across multiple stages of the attack lifecycle. By correlating Windows Event Logs with the execution timeline generated by CALDERA, analysts were able to observe how different techniques produced distinct forensic artifacts.
+
+The deployment of the Manx agent via PowerShell highlighted the importance of monitoring script execution and process creation events. As the operation progressed, account creation events, service modifications, scheduled task creation, and file system activity provided additional indicators that could be used to detect malicious behavior.
+
+The execution of the Clear Windows Event Logs technique further demonstrated the importance of monitoring defensive evasion activities. Attempts to remove logs should be treated as high-fidelity indicators of compromise because legitimate users rarely perform such actions during normal operations.
+
+Throughout the investigation, Windows Event Logs served as the primary source of evidence. By reviewing the logs generated before, during, and after each technique execution, it was possible to reconstruct the adversary's actions and understand how each ATT&CK technique manifests within a Windows environment.
+
+## Findings
+
+The CALDERA operation successfully emulated multiple adversary behaviors across several ATT&CK tactics and techniques. By deploying a Manx agent, creating custom abilities, building an adversary profile, and executing an operation against a victim machine, the exercise demonstrated how attacker actions can be observed through Windows Event Logs.
+
+The investigation highlighted the value of host-based logging in detecting malicious activity and provided practical insight into the forensic artifacts generated by techniques such as PowerShell execution, WMI abuse, service creation, scheduled task persistence, account creation, log clearing, file discovery, and data collection. The findings reinforce the importance of continuous monitoring, log analysis, and ATT&CK-based detection strategies in modern defensive operations.
+
+## Lessons Learned
+
+1. **PowerShell remains a critical attack vector**
+
+   The deployment of the Manx agent through PowerShell demonstrated how legitimate administrative tools can be leveraged by attackers to establish an initial foothold while blending in with normal system activity.
+
+2. **Windows Event Logs provide valuable forensic evidence**
+
+   The exercise showed that many adversary actions leave traces within Windows Event Logs, allowing defenders to reconstruct attacker activity and identify suspicious behavior.
+
+3. **Persistence techniques generate identifiable artifacts**
+
+   Activities such as creating local accounts, scheduled tasks, and services produced observable events that can be monitored for signs of compromise.
+
+4. **Defense evasion activities are high-value indicators**
+
+   Attempts to clear Windows Event Logs generated notable evidence that could indicate an attacker attempting to cover their tracks.
+
+5. **ATT&CK-based emulation improves detection validation**
+
+   Using CALDERA to emulate ATT&CK techniques provided a structured way to test security controls and understand how different attack techniques appear within system logs.
+
+6. **Correlation is essential for effective investigations**
+
+   Individual events may appear benign, but correlating multiple events across the attack lifecycle provides a clearer picture of adversary activity.
+
+---
+
+# Recommendations
+
+1. **Enable and retain comprehensive logging**
+
+   Ensure Windows Security Logs, PowerShell Logs, and Sysmon logs are enabled and retained for an appropriate period to support investigations.
+
+2. **Monitor PowerShell activity**
+
+   Implement monitoring and alerting for suspicious PowerShell execution, particularly encoded commands, script downloads, and unusual parent-child process relationships.
+
+3. **Alert on account creation events**
+
+   Configure detections for the creation of new local accounts and privilege changes, especially outside of approved administrative activities.
+
+4. **Monitor scheduled tasks and service creation**
+
+   Generate alerts for newly created or modified scheduled tasks and services, as these techniques are frequently used for persistence and execution.
+
+5. **Detect log-clearing activities**
+
+   Treat Windows Event Log clearing as a high-severity event and investigate all occurrences to determine whether they are legitimate or malicious.
+
+6. **Implement ATT&CK-aligned detection rules**
+
+   Map detection content to MITRE ATT&CK techniques to improve visibility across different stages of the attack lifecycle.
+
+7. **Conduct regular adversary emulation exercises**
+
+   Periodically use tools such as MITRE CALDERA to validate detection capabilities, identify visibility gaps, and improve incident response readiness.
+
+8. **Enhance threat hunting activities**
+
+   Use findings from adversary emulation exercises to develop threat hunting hypotheses and proactively search for similar attacker behaviors within the environment.
+
+
