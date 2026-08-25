@@ -1,12 +1,14 @@
 ## Executive Summary
-The Elastic Stack is a search and analysis platform designed to help analysts manage data from a wide variety of sources, forming the foundation of the modern Security Information and Event Management (SIEM) solution. The Elastic Stack enables security teams to ingest massive volumes of data and transform them into actionable insights. The Elastic stack consists of the following components:
+The Elastic Stack is a search and analysis platform designed to help analysts manage data from a wide variety of sources, forming the foundation of the modern Security Information and Event Management (SIEM) solution. The Elastic Stack is a collection of technologies used to ingest, store, search, analyze, and visualize data from a wide variety of sources. It can serve as the foundation for security monitoring and SIEM capabilities.. The Elastic stack consists of the following components:
 * Elasticsearch - The core search engine and data store of the Elastic Stack
 * Kibana - The graphical user interface of the Elastic Stack.
-* Elastic Agents - lightweight host-based services installed on individual systems to collect and forward data to Elastic and serve as the modern replacement for individual Beats in the Elastic Stack.
+* Elastic Agent – a single, lightweight agent used to collect and forward telemetry from endpoints and other sources to the Elastic Stack, centrally managed through Fleet.
 * Fleet Server - the centralized management interface for Elastic Agents, accessible through Kibana.
 
 ## Objective 
-In a typical Elastic-based deployment, data is collected from endpoints and servers by Elastic Agents and managed centrally using Fleet Server. The data is then ingested and indexed into Elasticsearch, making it searchable and available for analysis. Analysts interact with this data through Kibana, using dashboards, searches, and visualizations to conduct investigations and gain visibility across the environment.
+The objective of this investigation is to deploy and configure a functional Elastic-based SOC monitoring environment capable of collecting, centralizing, and analyzing security and web-server telemetry. The lab aims to demonstrate the deployment of Elasticsearch, Kibana, Fleet Server, and Elastic Agent, while also validating Apache and custom log ingestion.
+
+The investigation also aims to demonstrate how security analysts can use Kibana to explore logs, create visualizations, build dashboards, and establish a foundation for threat detection and security investigations.
 
 ## Scenario
 A growing organization wanted to establish a basic Security Operations Center (SOC) capability to improve its visibility into endpoint activities and security events across its environment. However, the organization lacked a centralized platform for collecting, storing, and analyzing logs from its systems. As a result, security investigations were time-consuming, and potentially suspicious activities could go unnoticed due to the absence of centralized monitoring.
@@ -23,10 +25,11 @@ By implementing this architecture, the organization would gain improved visibili
 * Fleet Server - Centrally manages Elastic Agents and distributes monitoring policies across endpoints.
 * Elastic Agents - Collects endpoint logs, metrics, and security telemetry for analysis.
 * Linux Terminal - Enables installation, configuration, and administration of Elastic Stack components.
+* Apache Web Server – Used as the source of web-server logs for demonstrating log collection, ingestion, and analysis within the Elastic environment.
 * Web Browser - Provides access to the Kibana interface for monitoring and management activities.
 
 ## SOC Lab Architecture 
-Web Application
+   Web Application
           │
           │ Apache Web Logs
           ▼
@@ -60,7 +63,7 @@ To improve visibility and support security monitoring activities, multiple visua
 
 Finally, a dashboard was developed to consolidate key visualizations into a single monitoring interface. The dashboard provided a centralized view of the environment, allowing analysts to quickly assess system activity, monitor log ingestion status, and investigate events of interest. This completed the SOC lab implementation by providing both data collection and visualization capabilities required for effective security monitoring and analysis.
 
-The successful deployment of Elasticsearch, Kibana, Fleet Server, Elastic Agents, Apache log integration, custom log ingestion, visualizations, and dashboards established a fully functional SOC lab capable of supporting log analysis, threat detection, and security investigations.
+The successful deployment of Elasticsearch, Kibana, Fleet Server, Elastic Agent, Apache log integration, custom log ingestion, visualizations, and dashboards established a functional SOC lab capable of supporting centralized log analysis, security monitoring, and future threat detection and investigation exercises.
 
 ## Findings
 * Elasticsearch and Kibana were successfully deployed and configured, providing a centralized platform for log management and analysis.
@@ -74,11 +77,13 @@ The successful deployment of Elasticsearch, Kibana, Fleet Server, Elastic Agents
 * Regularly review dashboards and visualizations to ensure they remain relevant to monitoring objectives.
 * Conduct periodic testing of agent connectivity and log ingestion to maintain data integrity.
 * Expand the lab environment to include multiple endpoints and additional security data sources.
+* Implement role-based access controls (RBAC) to ensure analysts only have access to the data and administrative functions required for their responsibilities.
+* Establish alerting and detection rules for suspicious web activity, authentication anomalies, unusual processes, and other relevant security events.
 ## Lessons Learned
 * Proper configuration of Fleet Server is essential for successful agent enrollment and centralized management.
 * Centralized logging significantly improves visibility and simplifies security investigations.
 * Data visualization enhances an analyst's ability to identify trends and anomalies quickly.
 * Integrating multiple log sources provides a more comprehensive view of system activity.
 * Building a SOC lab offers practical experience with security monitoring tools and log management workflows.
-
+* Log collection alone is not sufficient for effective security monitoring. Collecting telemetry provides visibility, but analysts must also develop detection rules, alerts, dashboards, and investigation workflows to turn raw data into actionable security intelligence.
 
